@@ -36387,6 +36387,24 @@ window.__require = function e(t, n, r) {
       var type = file.type;
       return new Promise(function(res, rej) {
         var reader = new FileReader();
+        var readTTF = function() {
+          reader.readAsArrayBuffer(file);
+          reader.onload = function(e) {
+            var url = window.URL.createObjectURL(new Blob([ e.target.result ], {
+              type: file.type
+            }));
+            var fontFace = new FontFace(file.name.replace(/\.[^/.]+$/, "") + "_LABEL_TTF", "url('" + url + "')");
+            document.fonts.add(fontFace);
+            fontFace.load().then(function(ff) {
+              var d = {
+                name: name,
+                type: type,
+                result: ff
+              };
+              res(d);
+            });
+          };
+        };
         switch (file.type) {
          case "image/png":
          case "image/jpg":
@@ -36410,25 +36428,14 @@ window.__require = function e(t, n, r) {
           break;
 
          case "font/ttf":
-          reader.readAsArrayBuffer(file);
-          reader.onload = function(e) {
-            var url = window.URL.createObjectURL(new Blob([ e.target.result ], {
-              type: file.type
-            }));
-            var fontFace = new FontFace(file.name.replace(/\.[^/.]+$/, "") + "_LABEL_TTF", "url('" + url + "')");
-            document.fonts.add(fontFace);
-            fontFace.load().then(function(ff) {
-              var d = {
-                name: name,
-                type: type,
-                result: ff
-              };
-              res(d);
-            });
-          };
+          readTTF();
           break;
 
          default:
+          if (name.endsWith(".ttf")) {
+            readTTF();
+            return;
+          }
           reader.readAsText(file);
           reader.onload = function(e) {
             file;
@@ -52292,7 +52299,7 @@ window.__require = function e(t, n, r) {
       value: true
     });
     exports.VERSION = void 0;
-    exports.VERSION = "v0.1.1_feature/art_gradient_1";
+    exports.VERSION = "v0.1.1_feature/art_gradient_2";
     cc._RF.pop();
   }, {} ],
   WebViewGlobal: [ function(require, module, exports) {
