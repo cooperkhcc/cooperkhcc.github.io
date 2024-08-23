@@ -24382,7 +24382,7 @@ window.__require = function e(t, n, r) {
           return;
         }
         arr = files.filter(function(f) {
-          return -1 !== [ "font/ttf" ].indexOf(f.type);
+          return -1 !== [ "font/ttf" ].indexOf(f.type) || f.name.endsWith(".ttf");
         });
         if (arr.length) {
           this.ttfDrop(arr);
@@ -52292,7 +52292,7 @@ window.__require = function e(t, n, r) {
       value: true
     });
     exports.VERSION = void 0;
-    exports.VERSION = "v0.1.1_feature/art_gradient";
+    exports.VERSION = "v0.1.1_feature/art_gradient_1";
     cc._RF.pop();
   }, {} ],
   WebViewGlobal: [ function(require, module, exports) {
